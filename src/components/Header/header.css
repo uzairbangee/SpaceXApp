@@ -16,17 +16,18 @@
     position: relative;
 }
 
+.logo__box{
+    width: 200px;
+    z-index: 9;
+}
+
 @media screen and (max-width: 960px){
     .logo__box{
+        width: 150px;
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
-}
-
-.logo__box{
-    width: 200px;
-    z-index: 9;
 }
 
 .logo{
@@ -120,7 +121,7 @@
     }
 }
 
-.nav-links a {
+.nav__links a {
     display: block;
     font: 16px/40px D-DIN-Regular,Arial,Verdana,sans-serif;
     font-weight: 500;

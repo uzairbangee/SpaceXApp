@@ -1,24 +1,12 @@
 import React, {Fragment} from 'react';
-import { LaunchListQuery } from '../../generated/graphql';
+import { LaunchAreaListsQuery } from '../../generated/graphql';
 import LaunchLists from "./../LaunchLists/LaunchLists.component";
 import { gql, useQuery } from '@apollo/client';
+import {QUERY_LAUNCH_LIST} from './../LaunchLists/query';
 
-export const QUERY_LAUNCH_LIST_FOR_HOME = gql`
-    query LaunchList($limit: Int!) {
-        launchesPast(limit: $limit) {
-            mission_name
-            launch_year
-            links {
-                flickr_images
-                video_link
-            }
-        }
-    }
-`;
-
-const Home = () => {
-    const { loading, error, data } = useQuery<LaunchListQuery>(QUERY_LAUNCH_LIST_FOR_HOME, {
-        variables: { limit: 5 },
+const Launches = () => {
+    const { loading, error, data } = useQuery<LaunchAreaListsQuery>(QUERY_LAUNCH_LIST, {
+        variables: { limit: 10 },
     });
     if(loading)
         console.log('Loading');
@@ -33,12 +21,13 @@ const Home = () => {
                 data?.launchesPast?.map((launch, index) => (
                     launch?.links?.flickr_images && launch?.links?.flickr_images?.length > 0 &&
                     <LaunchLists 
-                        smallHeading={`Launch ${launch?.launch_year}`} 
+                        smallHeading={`${launch.launch_site?.site_name}`} 
                         largeHeading={launch?.mission_name} 
                         image={launch?.links?.flickr_images[0]} 
-                        btnTitle={'Replay'} 
+                        btnTitle={'Details'}
+                        link={true}
+                        path={`/launch/${launch?.id}`}
                         align={index % 2 === 0 ? 'right' : 'left' }
-                        id={launch?.id}
                         key={index}
                     />
                 ))
@@ -47,4 +36,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default Launches;

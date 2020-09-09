@@ -4,6 +4,8 @@ import logo from "./../../images/logo.png";
 import MenuIcon from '@material-ui/icons/Menu';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ClearSharpIcon from '@material-ui/icons/ClearSharp';
+import useWebAnimations, { fadeInRight } from "@wellyshen/use-web-animations";
+import {Link} from 'react-router-dom';
 
 type cssPropType = {
     opacity: number,
@@ -22,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Header = () => {
+    const { ref } = useWebAnimations({ ...fadeInRight });
     const classes = useStyles();
     const [menu, setMenu] = useState(false);
     const [backgroundStyle, setBgStyle] = useState<React.CSSProperties>({
@@ -49,9 +52,11 @@ const Header = () => {
         <header className="header">
             <div className="header__bg"></div>
             <div className="inner_header">
+            <Link to="/">
                 <div className="logo__box">
                     <img src={logo} className="logo" alt=""/>
                 </div>
+            </Link>
                 <div className="menu_button">
                     {
                         menu
@@ -69,7 +74,9 @@ const Header = () => {
                     <div className="menu__background"></div>
                     <div className="navigation__menu">
                         <ul className="nav__links">
-                            <li className="nav__item">Mission</li>
+                            <Link to="/launch" onClick={onClose}>
+                                <li className="nav__item">Launch</li>
+                            </Link>
                         </ul>
                     </div>
                 </div>

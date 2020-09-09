@@ -1329,7 +1329,7 @@ export type LaunchListQuery = (
   { __typename?: 'Query' }
   & { launchesPast?: Maybe<Array<Maybe<(
     { __typename?: 'Launch' }
-    & Pick<Launch, 'mission_name' | 'launch_year'>
+    & Pick<Launch, 'id' | 'mission_name' | 'launch_year'>
     & { links?: Maybe<(
       { __typename?: 'LaunchLinks' }
       & Pick<LaunchLinks, 'flickr_images' | 'video_link'>
@@ -1337,10 +1337,54 @@ export type LaunchListQuery = (
   )>>> }
 );
 
+export type LaunchAreaListsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
+
+
+export type LaunchAreaListsQuery = (
+  { __typename?: 'Query' }
+  & { launchesPast?: Maybe<Array<Maybe<(
+    { __typename?: 'Launch' }
+    & Pick<Launch, 'id' | 'mission_name' | 'launch_year'>
+    & { launch_site?: Maybe<(
+      { __typename?: 'LaunchSite' }
+      & Pick<LaunchSite, 'site_name'>
+    )>, links?: Maybe<(
+      { __typename?: 'LaunchLinks' }
+      & Pick<LaunchLinks, 'flickr_images'>
+    )> }
+  )>>> }
+);
+
+export type LaunchDetailQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LaunchDetailQuery = (
+  { __typename?: 'Query' }
+  & { launch?: Maybe<(
+    { __typename?: 'Launch' }
+    & Pick<Launch, 'details' | 'id' | 'mission_name' | 'launch_success' | 'launch_year' | 'launch_date_local'>
+    & { launch_site?: Maybe<(
+      { __typename?: 'LaunchSite' }
+      & Pick<LaunchSite, 'site_name_long'>
+    )>, links?: Maybe<(
+      { __typename?: 'LaunchLinks' }
+      & Pick<LaunchLinks, 'flickr_images' | 'article_link' | 'video_link'>
+    )>, rocket?: Maybe<(
+      { __typename?: 'LaunchRocket' }
+      & Pick<LaunchRocket, 'rocket_name'>
+    )> }
+  )> }
+);
+
 
 export const LaunchListDocument = gql`
     query LaunchList($limit: Int!) {
   launchesPast(limit: $limit) {
+    id
     mission_name
     launch_year
     links {
@@ -1376,3 +1420,93 @@ export function useLaunchListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type LaunchListQueryHookResult = ReturnType<typeof useLaunchListQuery>;
 export type LaunchListLazyQueryHookResult = ReturnType<typeof useLaunchListLazyQuery>;
 export type LaunchListQueryResult = Apollo.QueryResult<LaunchListQuery, LaunchListQueryVariables>;
+export const LaunchAreaListsDocument = gql`
+    query LaunchAreaLists($limit: Int!) {
+  launchesPast(limit: $limit) {
+    id
+    mission_name
+    launch_site {
+      site_name
+    }
+    launch_year
+    links {
+      flickr_images
+    }
+  }
+}
+    `;
+
+/**
+ * __useLaunchAreaListsQuery__
+ *
+ * To run a query within a React component, call `useLaunchAreaListsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLaunchAreaListsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLaunchAreaListsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useLaunchAreaListsQuery(baseOptions?: Apollo.QueryHookOptions<LaunchAreaListsQuery, LaunchAreaListsQueryVariables>) {
+        return Apollo.useQuery<LaunchAreaListsQuery, LaunchAreaListsQueryVariables>(LaunchAreaListsDocument, baseOptions);
+      }
+export function useLaunchAreaListsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LaunchAreaListsQuery, LaunchAreaListsQueryVariables>) {
+          return Apollo.useLazyQuery<LaunchAreaListsQuery, LaunchAreaListsQueryVariables>(LaunchAreaListsDocument, baseOptions);
+        }
+export type LaunchAreaListsQueryHookResult = ReturnType<typeof useLaunchAreaListsQuery>;
+export type LaunchAreaListsLazyQueryHookResult = ReturnType<typeof useLaunchAreaListsLazyQuery>;
+export type LaunchAreaListsQueryResult = Apollo.QueryResult<LaunchAreaListsQuery, LaunchAreaListsQueryVariables>;
+export const LaunchDetailDocument = gql`
+    query LaunchDetail($id: ID!) {
+  launch(id: $id) {
+    details
+    id
+    mission_name
+    launch_success
+    launch_year
+    launch_date_local
+    launch_site {
+      site_name_long
+    }
+    links {
+      flickr_images
+      article_link
+      video_link
+    }
+    rocket {
+      rocket_name
+    }
+  }
+}
+    `;
+
+/**
+ * __useLaunchDetailQuery__
+ *
+ * To run a query within a React component, call `useLaunchDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLaunchDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLaunchDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLaunchDetailQuery(baseOptions?: Apollo.QueryHookOptions<LaunchDetailQuery, LaunchDetailQueryVariables>) {
+        return Apollo.useQuery<LaunchDetailQuery, LaunchDetailQueryVariables>(LaunchDetailDocument, baseOptions);
+      }
+export function useLaunchDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LaunchDetailQuery, LaunchDetailQueryVariables>) {
+          return Apollo.useLazyQuery<LaunchDetailQuery, LaunchDetailQueryVariables>(LaunchDetailDocument, baseOptions);
+        }
+export type LaunchDetailQueryHookResult = ReturnType<typeof useLaunchDetailQuery>;
+export type LaunchDetailLazyQueryHookResult = ReturnType<typeof useLaunchDetailLazyQuery>;
+export type LaunchDetailQueryResult = Apollo.QueryResult<LaunchDetailQuery, LaunchDetailQueryVariables>;
