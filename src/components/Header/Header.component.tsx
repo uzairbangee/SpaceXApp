@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Header = () => {
-    const { ref } = useWebAnimations({ ...fadeInRight });
+    const { ref } = useWebAnimations<HTMLDivElement>({ ...fadeInRight });
     const classes = useStyles();
     const [menu, setMenu] = useState(false);
     const [backgroundStyle, setBgStyle] = useState<React.CSSProperties>({
@@ -70,7 +70,7 @@ const Header = () => {
             <div className="menu__close" style={backgroundStyle}></div>
             {
                 menu &&
-                <div className="menu">
+                <div className="menu" ref={ref}>
                     <div className="menu__background"></div>
                     <div className="navigation__menu">
                         <ul className="nav__links">
