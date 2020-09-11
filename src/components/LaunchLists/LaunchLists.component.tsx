@@ -99,7 +99,7 @@ const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle,
               observer.unobserve(newref.current)
             }
         }
-    });
+    }, [src, image]);
 
     return (
         <Fragment>
