@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, useRef, useEffect, Fragment} from 'react';
 import "./launch.css";
 import {Link} from 'react-router-dom';
 import useWebAnimations, { fadeIn } from "@wellyshen/use-web-animations";
@@ -15,7 +15,7 @@ type propType = {
     image: string,
     btnTitle: string,
     align: string,
-    link: string,
+    link: boolean,
     path: string
 }
 
@@ -43,11 +43,16 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+const placeHolder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII=';
+
 const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle, align, link, path}) => {
 
     const { ref } = useWebAnimations<HTMLDivElement>({ ...fadeIn });
+    const newref = useRef<HTMLDivElement>(null);
 
     const [modal, setModal] = useState(false);
+    const [src, setImageSrc] = useState(placeHolder);
+
     const classes = useStyles();
 
     const modalOpen = () => {
@@ -58,10 +63,48 @@ const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle,
         setModal(false);
     }
 
+    useEffect(() => {
+        let observer: any;
+        let didCancel: boolean = false;
+
+        if (newref.current && src === placeHolder) {
+            if (IntersectionObserver) {
+                observer = new IntersectionObserver(
+                    entries => {
+                    entries.forEach(entry => {
+                        // when image is visible in the viewport + rootMargin
+                        if (
+                        !didCancel &&
+                        (entry.intersectionRatio > 0 || entry.isIntersecting)
+                        ) {
+                        setImageSrc(image)
+                        }
+                    })
+                    },
+                    {
+                    threshold: 0.01,
+                    rootMargin: '75%',
+                    }
+                )
+                observer.observe(newref.current)
+            } else {
+                // Old browsers fallback
+                setImageSrc(image)
+            }
+        }
+        return () => {
+            didCancel = true
+            // on component unmount, we remove the listner
+            if (observer && observer.unobserve) {
+              observer.unobserve(newref.current)
+            }
+        }
+    });
+
     return (
         <Fragment>
             <div className="section__feature">
-                <div className="background__image_launch" style={{backgroundImage: `url(${image})` }}>
+                <div className="background__image_launch" ref={newref} style={{backgroundImage: `url(${src})` }}>
                 </div>
                 <div className="heading__section" ref={ref}>
                     <div className={`inner_area_heading_${align}`}>

@@ -3,19 +3,7 @@ import { LaunchListQuery } from '../../generated/graphql';
 import LaunchLists from "./../LaunchLists/LaunchLists.component";
 import { gql, useQuery } from '@apollo/client';
 import Loading from './../Loading/Loading.component';
-
-export const QUERY_LAUNCH_LIST_FOR_HOME = gql`
-    query LaunchList($limit: Int!) {
-        launchesPast(limit: $limit) {
-            mission_name
-            launch_year
-            links {
-                flickr_images
-                video_link
-            }
-        }
-    }
-`;
+import {QUERY_LAUNCH_LIST_FOR_HOME} from './../LaunchLists/query';
 
 const Home = () => {
     const { loading, error, data } = useQuery<LaunchListQuery>(QUERY_LAUNCH_LIST_FOR_HOME, {

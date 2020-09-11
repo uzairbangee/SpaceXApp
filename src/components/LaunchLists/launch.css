@@ -172,4 +172,19 @@ td{
     opacity: 50%;
     transition:opacity 0.8s
 } */
-    
+
+@keyframes loaded {
+    0% {
+      opacity: 0.1;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+.loaded:not(.has-error) {
+    animation: loaded 300ms ease-in-out;
+}
+.has-error {
+    content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII=');
+}

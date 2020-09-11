@@ -1,23 +1,27 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import './App.css';
-import Header from "./components/Header/Header.component";
-import Home from "./components/Home/Home.components";
-import Footer from './components/Footer/Footer.component';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Launches from './components/Launches/Launches.component';
-import LaunchDetails from './components/LaunchDetails/LaunchDetails.component';
+import Loading from './components/Loading/Loading.component';
+
+const Header = React.lazy(() => import("./components/Header/Header.component"));
+const Home = React.lazy(() => import("./components/Home/Home.components"));
+const Footer = React.lazy(() => import('./components/Footer/Footer.component'));
+const Launches = React.lazy(() => import('./components/Launches/Launches.component'));
+const LaunchDetails = React.lazy(() => import('./components/LaunchDetails/LaunchDetails.component'));
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>  
-        <Header/>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/launch" element={<Launches/>}/>
-          <Route path="/launch/:id" element={<LaunchDetails/>}/>
-        </Routes>
-        <Footer/>
+      <BrowserRouter>
+        <Suspense fallback={<Loading/>}>
+          <Header/>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/launch" element={<Launches/>}/>
+              <Route path="/launch/:id" element={<LaunchDetails/>}/>
+            </Routes>
+          <Footer/>
+        </Suspense>
       </BrowserRouter>
     </div>
   );
