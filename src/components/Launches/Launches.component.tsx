@@ -1,9 +1,10 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, Suspense} from 'react';
 import { LaunchAreaListsQuery } from '../../generated/graphql';
-import LaunchLists from "./../LaunchLists/LaunchLists.component";
 import { gql, useQuery } from '@apollo/client';
 import {QUERY_LAUNCH_LIST} from './../LaunchLists/query';
 import Loading from '../Loading/Loading.component';
+
+const LaunchLists = React.lazy(() => import("./../LaunchLists/LaunchLists.component"));
 
 const Launches = () => {
     const { loading, error, data } = useQuery<LaunchAreaListsQuery>(QUERY_LAUNCH_LIST, {
@@ -19,6 +20,7 @@ const Launches = () => {
 
     return (
         <Fragment>
+            <Suspense fallback={<Loading/>}>
             {
                 data?.launchesPast?.map((launch, index) => (
                     launch?.links?.flickr_images && launch?.links?.flickr_images?.length > 0 &&
@@ -34,6 +36,7 @@ const Launches = () => {
                     />
                 ))
             }
+            </Suspense>
         </Fragment>
     );
 }
