@@ -66,8 +66,9 @@ const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle,
     useEffect(() => {
         let observer: any;
         let didCancel: boolean = false;
+        let node = newref.current;
 
-        if (newref.current && src === placeHolder) {
+        if (node && src === placeHolder) {
             if (IntersectionObserver) {
                 observer = new IntersectionObserver(
                     entries => {
@@ -86,17 +87,18 @@ const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle,
                     rootMargin: '75%',
                     }
                 )
-                observer.observe(newref.current)
+                observer.observe(node)
             } else {
                 // Old browsers fallback
                 setImageSrc(image)
             }
         }
         return () => {
-            didCancel = true
+            didCancel = true;
+            node = null;
             // on component unmount, we remove the listner
             if (observer && observer.unobserve) {
-              observer.unobserve(newref.current)
+              observer.unobserve(node)
             }
         }
     }, [src, image]);
