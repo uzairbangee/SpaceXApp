@@ -95,11 +95,11 @@ const LaunchLists:React.FC<any> = ({smallHeading, largeHeading, image, btnTitle,
         }
         return () => {
             didCancel = true;
-            node = null;
             // on component unmount, we remove the listner
             if (observer && observer.unobserve) {
               observer.unobserve(node)
             }
+            node = null;
         }
     }, [src, image]);
 
